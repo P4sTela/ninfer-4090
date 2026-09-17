@@ -152,7 +152,10 @@ void test_round_layout() {
     ninfer::LayoutBuilder builder;
     q36::RoundStateLayout round = q36::begin_round_state_layout(
         builder, q36::RoundStateSpec{
-                     .hidden = 32, .output_rows = 128, .draft_window = 5, .enable_mtp = true});
+                     .hidden = 32,
+                     .output_rows = 128,
+                     .draft_window = 5,
+                     .backend = ninfer::SpeculativeBackend::Mtp});
     const ninfer::TensorRegion exact_prefill =
         builder.add_tensor(ninfer::DType::BF16, {32, 16}, 256, "exact prefill hidden");
     q36::complete_round_state_layout(builder, round);
@@ -175,7 +178,10 @@ void test_round_layout() {
     q36::RoundStateLayout dflash = q36::begin_round_state_layout(
         speculative_builder,
         q36::RoundStateSpec{
-            .hidden = 32, .output_rows = 128, .draft_window = 15, .enable_dflash = true});
+            .hidden = 32,
+            .output_rows = 128,
+            .draft_window = 15,
+            .backend = ninfer::SpeculativeBackend::DFlash});
     q36::complete_round_state_layout(speculative_builder, dflash);
     (void)speculative_builder.finish(256);
     expect(dflash.logits.shape[1] == 1 && dflash.dflash_prefill.has_value() &&
@@ -185,6 +191,25 @@ void test_round_layout() {
            "K=15 DFlash storage is backend-owned");
     expect(!dflash.mtp.has_value() && !dflash.mtp_decode.has_value(),
            "DFlash layout does not allocate MTP storage");
+
+    ninfer::LayoutBuilder dflash2_builder;
+    q36::RoundStateLayout dflash2 = q36::begin_round_state_layout(
+        dflash2_builder,
+        q36::RoundStateSpec{
+            .hidden = 32,
+            .output_rows = 128,
+            .draft_window = 15,
+            .backend = ninfer::SpeculativeBackend::DFlash2});
+    q36::complete_round_state_layout(dflash2_builder, dflash2);
+    (void)dflash2_builder.finish(256);
+    expect(dflash2.dflash_decode && dflash2.dflash_decode->candidate_ids &&
+               dflash2.dflash_decode->candidate_ids->shape[0] == 16 &&
+               dflash2.dflash_decode->candidate_ids->shape[1] == 15 &&
+               dflash2.dflash_decode->proposal_q &&
+               dflash2.dflash_decode->proposal_q->shape[1] == 15,
+           "K=15 DFlash2 candidate scratch is backend-owned");
+    expect(!dflash2.mtp.has_value() && !dflash2.mtp_decode.has_value(),
+           "DFlash2 layout does not allocate MTP storage");
 }
 
 void test_mtp_alignment() {

@@ -4,5 +4,10 @@ CompileFlags:
     - --generate-code=*
     - -rdc=true
   Add:
+    - -std=c++20
+    - -I/Users/p4stela/ghq/github.com/P4sTela/ninfer-4090/include
+    - -I/Users/p4stela/ghq/github.com/P4sTela/ninfer-4090/src
+    - -I/Users/p4stela/ghq/github.com/P4sTela/ninfer-4090/src/targets/qwen3_6/export
+    - -I/Users/p4stela/ghq/github.com/P4sTela/ninfer-4090/src/targets/qwen3_6_27b/export
     - --cuda-gpu-arch=sm_120a
     - --cuda-path=/usr/local/cuda-13.1

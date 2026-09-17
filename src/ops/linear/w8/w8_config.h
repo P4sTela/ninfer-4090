@@ -62,19 +62,22 @@ using W8SmallTMmaDefaultSchedule = W8SmallTMmaSchedule<
 #endif
     (ActiveTokens > 4 ? W8SmallTMmaScaleAccess::Shared : W8SmallTMmaScaleAccess::Direct)>;
 
-using W8VocabularyProjectionGeometry   = W8LinearGeometry<248320, 5120>;
-using W8MtpInputProjectionGeometry     = W8LinearGeometry<5120, 10240>;
+using W8VocabularyProjectionGeometry       = W8LinearGeometry<248320, 5120>;
+using W8MtpInputProjectionGeometry         = W8LinearGeometry<5120, 10240>;
+using W8DFlash2AttentionProjectionGeometry = W8LinearGeometry<6144, 5120>;
+using W8DFlash2FeatureProjectionGeometry   = W8LinearGeometry<5120, 25600>;
 using W8MtpAttentionProjectionGeometry = W8LinearGeometry<14336, 5120>;
 using W8MtpAttentionOutputGeometry     = W8LinearGeometry<5120, 6144>;
 using W8MtpGateUpProjectionGeometry    = W8LinearGeometry<34816, 5120>;
 using W8MtpDownProjectionGeometry      = W8LinearGeometry<5120, 17408>;
 using W835bMtpProjectionGeometry       = W8LinearGeometry<2048, 4096>;
 
-inline constexpr std::int32_t kW8VocabularyFirstSmallT         = 1;
-inline constexpr std::int32_t kW8VocabularyLastSmallT          = 33;
-inline constexpr std::int32_t kW8MtpInputFirstSmallT           = 1;
-inline constexpr std::int32_t kW8MtpInputLastSmallT            = 48;
-inline constexpr std::int32_t kW8MtpAttentionFirstSmallT       = 1;
+inline constexpr std::int32_t kW8VocabularyFirstSmallT           = 1;
+inline constexpr std::int32_t kW8VocabularyLastSmallT            = 33;
+inline constexpr std::int32_t kW8DFlash2AttentionFirstSmallT     = 1;
+inline constexpr std::int32_t kW8MtpInputFirstSmallT             = 1;
+inline constexpr std::int32_t kW8MtpInputLastSmallT              = 48;
+inline constexpr std::int32_t kW8MtpAttentionFirstSmallT         = 1;
 inline constexpr std::int32_t kW8MtpAttentionLastSmallT        = 48;
 inline constexpr std::int32_t kW8MtpAttentionOutputFirstSmallT = 1;
 inline constexpr std::int32_t kW8MtpAttentionOutputLastSmallT  = 48;

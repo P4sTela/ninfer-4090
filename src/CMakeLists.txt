@@ -87,7 +87,9 @@ add_library(ninfer_ops STATIC
   ops/launcher/prepare_masked_block.cu
   ops/launcher/residual_add.cu
   ops/launcher/rmsnorm.cu
+  ops/launcher/rmsnorm_pack_tail.cu
   ops/launcher/rope.cu
+  ops/rmsnorm_rope/launch.cu
   ops/launcher/sampling.cu
   ops/launcher/scalar.cu
   ops/launcher/scatter.cu
@@ -143,6 +145,7 @@ add_library(ninfer_ops STATIC
   ops/attn_input_proj/w8/w8_attn_input_gemm_simt.cu
   ops/attn_input_proj/w8/w8_attn_input_gemm_splitk.cu
   ops/attn_input_proj/w8/w8_attn_input_plan.cpp
+  ops/attn_input_proj/w8/w8_dflash2_attn_input.cu
   ops/gdn_input_proj/fp8/fp8_gdn_input_decode.cu
   ops/gdn_input_proj/fp8/fp8_gdn_input_small_t.cu
   ops/gdn_input_proj/fp8/fp8_gdn_input_a8.cu
@@ -171,6 +174,7 @@ add_library(ninfer_ops STATIC
   ops/linear/bf16/bf16_gemv.cu
   ops/linear/bf16/bf16_gemm_mma.cu
   ops/linear/bf16/bf16_small_t.cu
+  ops/linear/bf16/bf16_n256_k5120.cu
   ops/linear/bf16/bf16_dispatch.cpp
   ops/linear/fp8/fp8_format.cpp
   ops/linear/fp8/fp8_gemv.cu
@@ -228,6 +232,7 @@ add_library(ninfer_ops STATIC
   ops/linear_swiglu/w8/w8_linear_swiglu_gemm_mma.cu
   ops/linear_swiglu/w8/w8_linear_swiglu_gemm_splitk.cu
   ops/linear_swiglu/w8/w8_linear_swiglu_plan.cpp
+  ops/linear_swiglu/w8/w8_dflash2_linear_swiglu.cu
   ops/linear/q6/q6_dispatch.cpp
   ops/linear/q6/q6_rowsplit_gemm_mma.cu
   ops/linear/q6/q6_rowsplit_gemm_simt.cu
@@ -237,6 +242,7 @@ add_library(ninfer_ops STATIC
   ops/linear/w8/w8_small_t.cu
   ops/linear/w8/w8_rowsplit_gemm_splitk.cu
   ops/linear/w8/w8_dispatch.cpp
+  ops/linear/w8/w8_feature.cu
   ops/linear_pair/w8/w8_pair_decode.cu
   ops/linear_pair/w8/w8_pair_gemm_concat.cu
   ops/linear_pair/w8/w8_pair_gemm_mma.cu
@@ -248,7 +254,26 @@ add_library(ninfer_ops STATIC
   ops/sparse_moe/prefill/sparse_moe_prefill_plan.cpp
   ops/sparse_moe/small_t/sparse_moe_small_t_kernels.cu
   ops/sparse_moe/small_t/sparse_moe_small_t_plan.cpp
+  # DFlash2 candidate generation, context materialization, and dynamic-convolution kernels.
+  ops/candidate_selector/bf16/candidate_selector_path.cu
+  ops/candidate_selector/bf16/candidate_selector_path_plan.cpp
+  ops/context_kv_materialize/context_kv_materialize.cpp
+  ops/context_kv_materialize/materialize.cu
+  ops/dynamic_grouped_conv/bf16/bf16_dynamic_grouped_conv_prepare_partial.cu
+  ops/dynamic_grouped_conv/bf16/bf16_dynamic_grouped_conv_prepare_plan.cpp
+  ops/dynamic_grouped_conv/bf16/bf16_dynamic_grouped_conv_prepare_reduce.cu
+  ops/dynamic_grouped_conv/w8/w8_dynamic_grouped_conv_add_materialized.cu
+  ops/dynamic_grouped_conv/w8/w8_dynamic_grouped_conv_add_plan.cpp
+  ops/linear_topk/fp8.cu
+  ops/linear_topk/fp8_m64.cu
+  ops/linear_topk/linear_topk.cpp
+  ops/linear_topk/merge.cu
+  ops/linear_topk/q4.cu
+  ops/linear_topk/q4_m64.cu
+  ops/linear_topk/w8.cu
+  ops/linear_topk/w8_m64.cu
   ops/linear/linear.cpp
+  ops/rmsnorm_rope/rmsnorm_rope.cpp
   ops/wrapper/add_bias.cpp
   ops/wrapper/argmax.cpp
   ops/wrapper/cast.cpp
@@ -259,6 +284,8 @@ add_library(ninfer_ops STATIC
   ops/wrapper/gdn_input_proj.cpp
   ops/wrapper/gelu.cpp
   ops/wrapper/attn_input_proj.cpp
+  ops/wrapper/candidate_selector.cpp
+  ops/wrapper/dynamic_grouped_conv.cpp
   ops/wrapper/l2norm.cpp
   ops/wrapper/layer_norm.cpp
   ops/wrapper/linear_add.cpp
@@ -272,6 +299,7 @@ add_library(ninfer_ops STATIC
   ops/wrapper/prepare_masked_block.cpp
   ops/wrapper/residual_add.cpp
   ops/wrapper/rmsnorm.cpp
+  ops/wrapper/rmsnorm_pack_tail.cpp
   ops/wrapper/rope.cpp
   ops/wrapper/sampling.cpp
   ops/wrapper/scalar.cpp
