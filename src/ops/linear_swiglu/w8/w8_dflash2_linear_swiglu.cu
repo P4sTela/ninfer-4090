@@ -54,7 +54,7 @@ constexpr auto make_launchers(std::index_sequence<Offsets...>) {
         &launch_tile<8 * (1 + static_cast<int>(Offsets))>...};
 }
 
-constexpr auto kLaunchers = make_launchers(std::make_index_sequence<kLastSmallT>{});
+constexpr auto kLaunchers = make_launchers(std::make_index_sequence<kLastSmallT / 8>{});
 
 } // namespace
 
@@ -63,7 +63,7 @@ void w8_dflash2_linear_swiglu_small_t_launch(const Tensor& x, const Weight& weig
     if (x.ne[1] < kFirstSmallT || x.ne[1] > kLastSmallT) {
         throw std::invalid_argument("W8 DFlash2 LinearSwiGLU small-T: unsupported T");
     }
-    const std::size_t index = static_cast<std::size_t>(x.ne[1] - 1);
+    const std::size_t index = static_cast<std::size_t>((x.ne[1] - 1) / 8);
     kLaunchers[index](x, weight, out, stream);
 }
 
