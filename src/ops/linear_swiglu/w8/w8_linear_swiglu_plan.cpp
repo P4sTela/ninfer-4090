@@ -38,7 +38,7 @@ constexpr std::array<RouteSpec, 18> kRoutes{{
     {561, kAnyCols, W8LinearSwiGluScheduleId::MmaR64C128},
 }};
 
-constexpr std::array<RouteSpec, 6> kDFlash2Routes{{
+constexpr std::array<RouteSpec, 5> kDFlash2Routes{{
     {1, 40, W8LinearSwiGluScheduleId::DFlash2SmallT},
     {41, 63, W8LinearSwiGluScheduleId::DFlash2MmaR32C64K128},
     {64, 64, W8LinearSwiGluScheduleId::DFlash2MmaR64C64K128},
