@@ -40,7 +40,13 @@ void tiled_projection(const Tensor& x, const Weight& weight, Tensor& out, cudaSt
     using Geometry            = W8LinearGeometry<kRows, InputRows>;
     using Schedule            = W8SmallTMmaSchedule<Warps, TileColumns, Warps == 8 ? 2 : 3,
                                                     W8SmallTMmaScaleAccess::Shared, Activation>;
-    constexpr int SharedBytes = TileColumns > 64 ? sizeof(W8SmallTMmaSharedStorage<Schedule>) : 0;
+    // sm_89 caps statically allocated shared memory at 48 KiB. The 5090 reference threshold
+    // (TileColumns > 64) would leave the 40-column 8-warp tile (49664 B) in static memory and
+    // fail the sm_89 build, so both this launcher and the kernel's kDynamicShared switch on
+    // sizeof(SharedStorage) instead of the tile count. They must stay in sync.
+    constexpr int SharedBytes =
+        sizeof(W8SmallTMmaSharedStorage<Schedule>) > 48 * 1024 ? sizeof(W8SmallTMmaSharedStorage<Schedule>)
+                                                               : 0;
     if constexpr (SharedBytes > 0) {
         static const cudaError_t attribute = cudaFuncSetAttribute(
             w8_small_t_mma_kernel<Geometry, TileColumns, Schedule, W8ContiguousOutput,
