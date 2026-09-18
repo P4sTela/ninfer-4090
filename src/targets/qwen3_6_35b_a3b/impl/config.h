@@ -70,6 +70,9 @@ struct VisionConfig : qwen3_6::VisionBackboneConfig {
 
 struct DFlashConfig {
     static constexpr bool supported        = true;
+    // DFlash2 (coherent candidate selector) is 27b-only in this fork; the shared runtime
+    // resolves the member via if-constexpr, so 35b must define it.
+    static constexpr bool coherent_selector = false;
     static constexpr int layers            = 6;
     static constexpr int local_layers      = 5;
     static constexpr int feature_layers    = 8;

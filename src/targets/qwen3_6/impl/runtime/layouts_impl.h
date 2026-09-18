@@ -493,7 +493,7 @@ WorkspacePlan build_workspace_plan(const SequencePlanImpl& plan) {
     }
 
     if (plan.features.masked_draft()) {
-        if constexpr (!(Variant::supports_dflash || Variant::supports_dflash2)) {
+        if constexpr (!(Variant::supports_dflash || target_supports_dflash2<Variant>())) {
             throw std::logic_error("unsupported target reached masked-draft scratch planning");
         } else {
             const auto dflash_context_capacity = [&](std::int32_t width, std::int32_t batch,

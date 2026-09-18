@@ -662,10 +662,9 @@ LoadedModelData::LoadedModelData(BindingPlan plan, artifact::MaterializedArtifac
                                                               NumericFormat::BF16, {5120});
             target.attention_conv.base_kernel =
                 artifact::materialized_tensor(backing, layer_source.attention_conv.base_kernel,
-                                              NumericFormat::BF16, {2, 2, 5120});
-            target.attention_conv.kernel_projection = artifact::materialized_weight(
-                backing, layer_source.attention_conv.kernel_projection, NumericFormat::BF16, 1280,
-                5120);
+                                              NumericFormat::BF16, {5120, 2, 2});
+            target.attention_conv.kernel_projection = materialized_weight(
+                backing, layer_source.attention_conv.kernel_projection, 1280, 5120);
             target.query_key_value =
                 materialized_weight(backing, layer_source.query_key_value, 6144, 5120);
             target.context_key   = row_view(target.query_key_value, 4096, 1024);
@@ -679,9 +678,9 @@ LoadedModelData::LoadedModelData(BindingPlan plan, artifact::MaterializedArtifac
             target.post_attention_norm = artifact::materialized_tensor(
                 backing, layer_source.post_attention_norm, NumericFormat::BF16, {5120});
             target.mlp_conv.base_kernel = artifact::materialized_tensor(
-                backing, layer_source.mlp_conv.base_kernel, NumericFormat::BF16, {2, 2, 5120});
-            target.mlp_conv.kernel_projection = artifact::materialized_weight(
-                backing, layer_source.mlp_conv.kernel_projection, NumericFormat::BF16, 1280, 5120);
+                backing, layer_source.mlp_conv.base_kernel, NumericFormat::BF16, {5120, 2, 2});
+            target.mlp_conv.kernel_projection =
+                materialized_weight(backing, layer_source.mlp_conv.kernel_projection, 1280, 5120);
             target.gate_up = materialized_weight(backing, layer_source.gate_up, 34816, 5120);
             target.down    = materialized_weight(backing, layer_source.down, 5120, 17408);
         }
