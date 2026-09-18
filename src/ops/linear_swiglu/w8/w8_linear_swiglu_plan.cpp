@@ -42,8 +42,7 @@ constexpr std::array<RouteSpec, 6> kDFlash2Routes{{
     {1, 40, W8LinearSwiGluScheduleId::DFlash2SmallT},
     {41, 63, W8LinearSwiGluScheduleId::DFlash2MmaR32C64K128},
     {64, 64, W8LinearSwiGluScheduleId::DFlash2MmaR64C64K128},
-    {65, 80, W8LinearSwiGluScheduleId::DFlash2MmaR64C80K128},
-    {81, 96, W8LinearSwiGluScheduleId::DFlash2MmaR64C96K128},
+    {65, 96, W8LinearSwiGluScheduleId::DFlash2MmaR64C80K128},
     {97, kAnyCols, W8LinearSwiGluScheduleId::MmaR64C128},
 }};
 
@@ -106,8 +105,6 @@ const char* w8_linear_swiglu_schedule_name(W8LinearSwiGluScheduleId schedule) no
         return "linear_swiglu.w8.dflash2.mma.r64.c64.k128";
     case W8LinearSwiGluScheduleId::DFlash2MmaR64C80K128:
         return "linear_swiglu.w8.dflash2.mma.r64.c80.k128";
-    case W8LinearSwiGluScheduleId::DFlash2MmaR64C96K128:
-        return "linear_swiglu.w8.dflash2.mma.r64.c96.k128";
     }
     return "linear_swiglu.w8.unknown";
 }
@@ -189,9 +186,6 @@ void w8_linear_swiglu_execute_plan(const W8LinearSwiGluPlan& plan, const Tensor&
         return;
     case W8LinearSwiGluScheduleId::DFlash2MmaR64C80K128:
         w8_dflash2_linear_swiglu_mma_r64_c80_k128_launch(x, w, out, stream);
-        return;
-    case W8LinearSwiGluScheduleId::DFlash2MmaR64C96K128:
-        w8_dflash2_linear_swiglu_mma_r64_c96_k128_launch(x, w, out, stream);
         return;
     }
     throw std::logic_error("W8 LinearSwiGLU: unknown schedule");

@@ -42,13 +42,13 @@ void w8_linear_swiglu_mma_r128_c64_launch(const Tensor& x, const Weight& w, Tens
                                           cudaStream_t stream);
 void w8_linear_swiglu_mma_r128_c80_launch(const Tensor& x, const Weight& w, Tensor& out,
                                           cudaStream_t stream);
+void w8_dflash2_linear_swiglu_small_t_launch(const Tensor& x, const Weight& w, Tensor& out,
+                                             cudaStream_t stream);
 void w8_dflash2_linear_swiglu_mma_r32_c64_k128_launch(const Tensor& x, const Weight& w, Tensor& out,
                                                       cudaStream_t stream);
 void w8_dflash2_linear_swiglu_mma_r64_c64_k128_launch(const Tensor& x, const Weight& w, Tensor& out,
                                                       cudaStream_t stream);
 void w8_dflash2_linear_swiglu_mma_r64_c80_k128_launch(const Tensor& x, const Weight& w, Tensor& out,
-                                                      cudaStream_t stream);
-void w8_dflash2_linear_swiglu_mma_r64_c96_k128_launch(const Tensor& x, const Weight& w, Tensor& out,
                                                       cudaStream_t stream);
 
 } // namespace ninfer::ops::detail
